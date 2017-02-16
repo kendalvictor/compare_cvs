@@ -1,35 +1,23 @@
 
 from django.shortcuts import render
 from django.http import HttpResponse
+from textblob import TextBlob as tb
+from .tfidf import tfidf
 from .models import Curriculum
-
 
 
 def home(request):
     print ('hola mundo')
+    curriculums = Curriculum.objects.all()
+
+    bloblist = [tb(curriculum.algoritmo_texto) for curriculum in curriculums]
+    for i, blob in enumerate(bloblist):
+        print("Top words in document {}".format(i + 1))
+        scores = {word: tfidf(word, blob, bloblist) for word in blob.words}
+        sorted_words = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+        for word, score in sorted_words[:3]:
+            print("\tWord: {}, TF-IDF: {}".format(word, round(score, 5)))
+
     return render(request, 'home.html', locals())
 
 
-# def restaurante_list(request):
-#     print ('restaurante list api')
-#     serializer = None
-#     result = {'status': 'error'}
-#     time.sleep(5)
-#     if request.method == 'GET':
-#         restaurantes = Restaurante.objects.all()
-#         serializer = RestaurantSerializer(restaurantes, many=True)
-#         result = {'status': 'success', 'data': serializer.data}
-#     return JSONResponse(result)
-
-
-# def restaurante_detail(request, id):
-#     print ('restaurante detail')
-#     serializer = None
-#     result = {'status': 'error'}
-#     if request.method == 'GET':
-#         restaurante = Restaurante.objects.filter(id=id)
-#         if restaurante:
-#             serializer = RestaurantSerializer(restaurante[0])
-#             result = {'status': 'success', 'data': serializer.data}
-#     print ('result ', result)
-#     return JSONResponse(result)
