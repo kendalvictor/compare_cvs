@@ -9,10 +9,11 @@ from .utils import clean_word
 
 def home(request):
     print ('hola mundo')
-    curriculums = Curriculum.objects.all()
+    curriculums = Curriculum.objects.all()[:5]
 
     bloblist = [tb(curriculum.algoritmo_texto) for curriculum in curriculums]
     for i, blob in enumerate(bloblist):
+        print(blob)
         print("Top words in document {}".format(i + 1))
         scores = {word: tfidf(word, blob, bloblist) for word in blob.words}
         sorted_words = sorted(scores.items(), key=lambda x: x[1], reverse=True)

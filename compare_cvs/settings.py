@@ -79,8 +79,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'compare_cvs2',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'USER': 'victor',
+        'PASSWORD': 'kendal',
         'HOST': 'localhost',
         'PORT': '5432',
     }
